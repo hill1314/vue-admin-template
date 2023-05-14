@@ -20,6 +20,7 @@
 
         <!-- 批量删除 -->
         <el-button type="danger" size="mini" @click="removeRows()">批量删除 </el-button>
+        <el-button type="primary" size="mini" @click="toAddPage">添加设置 </el-button>
 
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
@@ -86,6 +87,11 @@ export default ({
         // 选中事件 
         handleSelectionChange(selection) {
             this.multiSelection = selection;
+        },
+
+        //去添加
+        toAddPage(){
+            this.$router.push({ path: '/hospital/add' })
         },
 
         //查询列表
