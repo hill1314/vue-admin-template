@@ -1,21 +1,42 @@
 <template>
     <div class="app-container">
-        医院设置列表
-    </div>
+        <h2>医院设置列表</h2>
 
+        <el-table :data="tableData" style="width: 100%">
+            <el-table-column type="index" label="序号" width="50" />
+            <el-table-column prop="name" label="名称" />
+            <el-table-column prop="contractPerson" label="联系人" />
+            <el-table-column prop="contractPhone" label="联系电话" />
+            <el-table-column prop="status" label="状态">
+                <template slot-scope="scope">
+                    {{ scope.row.status === 1 ? '可用' : '不可用' }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="createTime" label="创建日期" />
+        </el-table>
+
+        <!-- 分页 -->
+        <el-pagination :page-size="pageSize"
+            :current-page="currPage" :total="totalPage" 
+            layout="prev, pager, next" background 
+            @current-change="getList" >
+        </el-pagination>
+
+    </div>
 </template>
 
 <script>
 import { getHospSetList } from '@/api/hospital'
 // import hospital from '@/api/hospital'
 
-export default({
+export default ({
     data() {
-        return{
-            currPage:1,
-            pageSize:1,
-            searchObj:{},
-            listResult:[]
+        return {
+            currPage: 1,
+            pageSize: 3,
+            totalPage: 0,
+            searchObj: {},
+            tableData: []
         }
     },
     created() {
@@ -23,14 +44,21 @@ export default({
         this.getList();
     },
     methods: {
-        getList(){
-            getHospSetList(this.currPage,this.pageSize,this.searchObj)
-            .then(response=>{
-                console.info(response);
-            })
-            .catch(error=>{
-                console.error(error);
-            })
+        handleSizeChange(val) {
+            console.log(`每页 ${val} 条`);
+            this.pageSize = val;
+        },
+        getList(page=1) {
+            this.currPage = page;
+            getHospSetList(this.currPage, this.pageSize, this.searchObj)
+                .then(response => {
+                    this.tableData = response.data.records;
+                    this.totalPage = response.data.total;
+                    this.currPage = response.data.current;
+                })
+                .catch(error => {
+                    console.error("error===", error);
+                })
         }
     },
 })
