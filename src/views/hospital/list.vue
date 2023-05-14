@@ -38,10 +38,10 @@
 
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status==1" type="danger" size="mini" icon="el-icon-delete" 
-                    @click="removeById(scope.row.id)" > 删除</el-button>
-                    <el-button v-if="scope.row.status==0" type="primary" size="mini" icon="el-icon-delete" 
-                    @click="revertById(scope.row.id)" > 还原</el-button>
+                    <el-button v-if="scope.row.status == 1" type="danger" size="mini" icon="el-icon-delete"
+                        @click="removeById(scope.row.id)"> 删除</el-button>
+                    <el-button v-if="scope.row.status == 0" type="primary" size="mini" icon="el-icon-delete"
+                        @click="revertById(scope.row.id)"> 还原</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { getHospSetList, removeHospitalById, removeBatch ,revertHospitalById} from '@/api/hospital'
+import { getHospSetList, removeHospitalById, removeBatch, revertHospitalById } from '@/api/hospital'
 import { MessageBox } from 'element-ui';
 // import hospital from '@/api/hospital'
 
@@ -105,17 +105,17 @@ export default ({
         //还原
         revertById(id) {
             revertHospitalById(id)
-                    .then(response => {
-                        this.$message({
-                            type: 'success',
-                            message: '还原成功!'
-                        });
-                        //刷新页面
-                        this.getList();
-                    })
-                    .catch(error => {
-                        console.error("error===", error);
-                    })
+                .then(response => {
+                    this.$message({
+                        type: 'success',
+                        message: '还原成功!'
+                    });
+                    //刷新页面
+                    this.getList();
+                })
+                .catch(error => {
+                    console.error("error===", error);
+                })
         },
 
         // 删除记录
@@ -153,17 +153,14 @@ export default ({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                var ids = [];                
-                console.log("multiSelection===",this.multiSelection)
-                var obj;
+                var ids = [];
+                console.log("multiSelection===", this.multiSelection)
                 for (var i = 0; i < this.multiSelection.lenth; i++) {
-                    obj = this.multiSelection[i];
-                    console.log("obj===",obj);
-                    ids.push(obj.id);
+                    ids.push(this.multiSelection[i].id);
                 }
                 console.log(ids);
 
-                if(ids.length==0){
+                if (ids.length == 0) {
                     MessageBox.alert("未选中任何内容");
                     return;
                 }

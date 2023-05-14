@@ -31,3 +31,11 @@ export function removeBatch(ids) {
     data: ids //data表示用json形式传，非json用param
   })
 }
+
+export function addHospital(setting) {
+  return request({
+    url: `/admin/hospital/save`,
+    method: 'post',
+    data: setting //data表示用json形式传，非json用param
+  })
+}
