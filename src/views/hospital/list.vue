@@ -39,6 +39,9 @@
 
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
+                    <router-link :to="'/hospital/modify/' + scope.row.id">
+                        <el-button type="primary" size="mini" icon="el-icon-edit"> 修改</el-button>
+                    </router-link>
                     <el-button v-if="scope.row.status == 1" type="danger" size="mini" icon="el-icon-delete"
                         @click="removeById(scope.row.id)"> 删除</el-button>
                     <el-button v-if="scope.row.status == 0" type="primary" size="mini" icon="el-icon-delete"
@@ -90,7 +93,7 @@ export default ({
         },
 
         //去添加
-        toAddPage(){
+        toAddPage() {
             this.$router.push({ path: '/hospital/add' })
         },
 
