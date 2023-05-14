@@ -23,7 +23,8 @@
 
 
         <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="tableData" :load="getChildren" :tree-props="{ 'children': children, 'hasChildren': hasChildren }"
+            row-key="id" border lazy style="width: 100%"> 
             <el-table-column prop="id" label="ID" />
             <el-table-column prop="parentId" label="父ID" />
             <el-table-column prop="name" label="名称" />
@@ -59,7 +60,7 @@
 </template>
 
 <script>
-import { getDicList } from '@/api/dic'
+import { getDicList,getByParentId } from '@/api/dic'
 
 
 export default ({
@@ -73,7 +74,9 @@ export default ({
                 code: '',
                 parentId: null
             },
-            tableData: []
+            tableData: [
+                {children:[]}
+            ]
         }
     },
     created() {
@@ -97,6 +100,11 @@ export default ({
                 .catch(error => {
                     console.error("error===", error);
                 })
+        },
+        getChildren(tree,treeNode,resolve) {
+            getByParentId(tree.id).then(response=>{
+                resolve(response.data);
+            })
         }
     }
 

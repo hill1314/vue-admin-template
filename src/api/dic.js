@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function getByParentId(id) {
+    return request({
+        url: `/admin/dic/findByParentId/${id}`,
+        method: 'get',
+        data: '' //data表示用json形式传，非json用param
+    })
+}
+
 export function getDicList(currPage, pageSize, searchObj) {
     return request({
         url: `/admin/dic/findByPage/${currPage}/${pageSize}`,
