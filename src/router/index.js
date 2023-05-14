@@ -77,7 +77,8 @@ export const constantRoutes = [
         path: 'modify/:id',
         name: '医院设置修改',
         component: () => import('@/views/hospital/modify'),
-        meta: { title: '医院设置修改', icon: 'tree' } 
+        meta: { title: '医院设置修改', icon: 'tree' },
+        hidden: true
       }
     ]
   },
