@@ -18,13 +18,14 @@
             </el-form-item>
         </el-form>
 
-        <!-- 添加跳转 -->
+        <!-- 其他按钮 -->
         <el-button type="primary" size="mini" @click="toAddPage">添加设置 </el-button>
+        <el-button type="primary" size="mini" @click="importData"> 导入Excel </el-button>
 
 
         <!-- 表格 -->
         <el-table :data="tableData" :load="getChildren" :tree-props="{ 'children': children, 'hasChildren': hasChildren }"
-            row-key="id" border lazy style="width: 100%"> 
+            row-key="id" border lazy style="width: 100%">
             <el-table-column prop="id" label="ID" />
             <el-table-column prop="parentId" label="父ID" />
             <el-table-column prop="name" label="名称" />
@@ -56,16 +57,27 @@
             background @current-change="getList">
         </el-pagination>
 
+        <!-- 文件上传 -->
+        <el-dialog title="导入" :visible.sync="dialogImportVisible" width="600px">
+            <el-upload :multiple="false" class="upload-demo" :on-success="onUploadSuccess"
+                action="'http://localhost:8020/admin/dic/importData'">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或 <em>点击上传</em> </div>
+                <div class="el-upload__tip" slot="tip">只能上传xls文件，且不超过500kb</div>
+            </el-upload>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
-import { getDicList,getByParentId } from '@/api/dic'
+import { getDicList, getByParentId } from '@/api/dic'
 
 
 export default ({
     data() {
         return {
+            dialogImportVisible: false, //弹框
             currPage: 1,
             pageSize: 3,
             totalPage: 0,
@@ -75,7 +87,10 @@ export default ({
                 parentId: null
             },
             tableData: [
-                {children:[]}
+                {
+                    hasChildren: false,
+                    children: []
+                }
             ]
         }
     },
@@ -101,10 +116,17 @@ export default ({
                     console.error("error===", error);
                 })
         },
-        getChildren(tree,treeNode,resolve) {
-            getByParentId(tree.id).then(response=>{
+        getChildren(tree, treeNode, resolve) {
+            getByParentId(tree.id).then(response => {
                 resolve(response.data);
             })
+        },
+        importData() {
+            this.dialogImportVisible = true;
+        },
+        onUploadSuccess() {
+            this.dialogImportVisible = false;
+            this.getList(1);
         }
     }
 
