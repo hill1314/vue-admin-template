@@ -44,7 +44,7 @@
                     </router-link>
                     <el-button v-if="scope.row.status == 1" type="danger" size="mini" icon="el-icon-delete"
                         @click="removeById(scope.row.id)"> 删除</el-button>
-                    <el-button v-if="scope.row.status == 0" type="primary" size="mini" icon="el-icon-delete"
+                    <el-button v-if="scope.row.status == 0" type="primary" size="mini" icon="el-icon-refresh-right"
                         @click="revertById(scope.row.id)"> 还原</el-button>
                 </template>
             </el-table-column>

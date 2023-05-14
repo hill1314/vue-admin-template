@@ -84,6 +84,35 @@ export const constantRoutes = [
   },
 
   {
+    path: '/dic',
+    component: Layout,
+    redirect: '/dic/list',
+    name: '字典管理',
+    meta: { title: '字典管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'list',
+        name: '字段列表',
+        component: () => import('@/views/dic/list'),
+        meta: { title: '字段列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: '字典添加',
+        component: () => import('@/views/dic/add'),
+        meta: { title: '字典添加', icon: 'tree' }
+      },
+      {
+        path: 'modify/:id',
+        name: '字典修改',
+        component: () => import('@/views/dic/modify'),
+        meta: { title: '字典修改', icon: 'tree' },
+        hidden: true
+      }
+    ]
+  },
+
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
