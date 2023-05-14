@@ -1,6 +1,6 @@
 <template>
     <div class="app-container">
-        医院设置添加
+        <h2>医院设置添加</h2>
 
         <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="医院名称">
