@@ -20,6 +20,7 @@
         <!-- 表格 -->
         <el-table :data="tableData" style="width: 100%">
             <el-table-column type="index" label="序号" width="50" />
+            <el-table-column prop="id" label="ID" />
             <el-table-column prop="name" label="名称" />
             <el-table-column prop="contractPerson" label="联系人" />
             <el-table-column prop="contractPhone" label="联系电话" />
@@ -29,6 +30,11 @@
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建日期" />
+            <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                    <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeById(scope.row.id)" />
+                </template>
+            </el-table-column>
         </el-table>
 
         <!-- 分页 -->
@@ -40,7 +46,8 @@
 </template>
 
 <script>
-import { getHospSetList } from '@/api/hospital'
+import { getHospSetList, removeHospitalById } from '@/api/hospital'
+import { MessageBox } from 'element-ui';
 // import hospital from '@/api/hospital'
 
 export default ({
@@ -65,6 +72,8 @@ export default ({
             console.log(`每页 ${val} 条`);
             this.pageSize = val;
         },
+
+        //查询列表
         getList(page = 1) {
             this.currPage = page;
             getHospSetList(this.currPage, this.pageSize, this.searchObj)
@@ -76,6 +85,37 @@ export default ({
                 .catch(error => {
                     console.error("error===", error);
                 })
+        },
+
+        // 删除记录
+        removeById(id) {
+            this.$confirm('是否确认要继续该记录?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                removeHospitalById(id)
+                    .then(response => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        //刷新页面
+                        this.getList();
+                    })
+                    .catch(error => {
+                        console.error("error===", error);
+                    })
+
+
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+
+
         }
     },
 })
