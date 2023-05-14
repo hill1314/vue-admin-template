@@ -2,6 +2,7 @@
     <div class="app-container">
         <h2>医院设置列表</h2>
 
+        <!-- 查询 -->
         <el-form :inline="true" :model="searchObj" class="form-inline">
             <el-form-item label="医院名称">
                 <el-input v-model="searchObj.name" placeholder="医院名称"></el-input>
@@ -17,8 +18,12 @@
             </el-form-item>
         </el-form>
 
+        <!-- 批量删除 -->
+        <el-button type="danger" size="mini" @click="removeRows()">批量删除 </el-button>
+
         <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%">
+        <el-table :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" />
             <el-table-column type="index" label="序号" width="50" />
             <el-table-column prop="id" label="ID" />
             <el-table-column prop="name" label="名称" />
@@ -30,9 +35,13 @@
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建日期" />
+
             <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                    <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeById(scope.row.id)" />
+                    <el-button v-if="scope.row.status==1" type="danger" size="mini" icon="el-icon-delete" 
+                    @click="removeById(scope.row.id)" > 删除</el-button>
+                    <el-button v-if="scope.row.status==0" type="primary" size="mini" icon="el-icon-delete" 
+                    @click="revertById(scope.row.id)" > 还原</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -46,7 +55,7 @@
 </template>
 
 <script>
-import { getHospSetList, removeHospitalById } from '@/api/hospital'
+import { getHospSetList, removeHospitalById, removeBatch ,revertHospitalById} from '@/api/hospital'
 import { MessageBox } from 'element-ui';
 // import hospital from '@/api/hospital'
 
@@ -60,7 +69,8 @@ export default ({
                 name: '',
                 status: ''
             },
-            tableData: []
+            tableData: [],
+            multiSelection: []
         }
     },
     created() {
@@ -71,6 +81,11 @@ export default ({
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
             this.pageSize = val;
+        },
+
+        // 选中事件 
+        handleSelectionChange(selection) {
+            this.multiSelection = selection;
         },
 
         //查询列表
@@ -85,6 +100,22 @@ export default ({
                 .catch(error => {
                     console.error("error===", error);
                 })
+        },
+
+        //还原
+        revertById(id) {
+            revertHospitalById(id)
+                    .then(response => {
+                        this.$message({
+                            type: 'success',
+                            message: '还原成功!'
+                        });
+                        //刷新页面
+                        this.getList();
+                    })
+                    .catch(error => {
+                        console.error("error===", error);
+                    })
         },
 
         // 删除记录
@@ -107,6 +138,48 @@ export default ({
                         console.error("error===", error);
                     })
 
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });
+            });
+        },
+
+        // 批量删除
+        removeRows() {
+            this.$confirm('是否确认要继续选中记录?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                var ids = [];                
+                console.log("multiSelection===",this.multiSelection)
+                var obj;
+                for (var i = 0; i < this.multiSelection.lenth; i++) {
+                    obj = this.multiSelection[i];
+                    console.log("obj===",obj);
+                    ids.push(obj.id);
+                }
+                console.log(ids);
+
+                if(ids.length==0){
+                    MessageBox.alert("未选中任何内容");
+                    return;
+                }
+
+                removeBatch(ids)
+                    .then(response => {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                        //刷新页面
+                        this.getList();
+                    })
+                    .catch(error => {
+                        console.error("error===", error);
+                    })
 
             }).catch(() => {
                 this.$message({
@@ -114,8 +187,6 @@ export default ({
                     message: '已取消删除'
                 });
             });
-
-
         }
     },
 })

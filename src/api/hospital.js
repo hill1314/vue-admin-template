@@ -8,10 +8,26 @@ export function getHospSetList(currPage,pageSize,searchObj) {
   })
 }
 
+export function revertHospitalById(id) {
+  return request({
+    url: `/admin/hospital/revert/${id}`,
+    method: 'post',
+    data: {} //data表示用json形式传，非json用param
+  })
+}
+
 export function removeHospitalById(id) {
   return request({
     url: `/admin/hospital/delete/${id}`,
-    method: 'post',
+    method: 'delete',
     data: {} //data表示用json形式传，非json用param
+  })
+}
+
+export function removeBatch(ids) {
+  return request({
+    url: `/admin/hospital/deleteBatch`,
+    method: 'delete',
+    data: ids //data表示用json形式传，非json用param
   })
 }
