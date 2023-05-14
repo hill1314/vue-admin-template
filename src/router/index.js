@@ -54,6 +54,27 @@ export const constantRoutes = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/hospital',
+    component: Layout,
+    redirect: '/hospital/list',
+    name: '医院设置管理',
+    meta: { title: '医院设置管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'list',
+        name: '医院设置列表',
+        component: () => import('@/views/hospital/list'),
+        meta: { title: '医院设置列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: '医院设置添加',
+        component: () => import('@/views/hospital/add'),
+        meta: { title: '医院设置添加', icon: 'tree' }
+      }
+    ]
+  },
 
   {
     path: '/example',
