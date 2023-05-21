@@ -62,9 +62,9 @@
 </template>
 
 <script>
-// import { getHospSetList, removeHospitalById, removeBatch, revertHospitalById } from '@/api/dream'
+import { getDreamList, removeBatch, updateDreamStatus } from '@/api/dream'
 import { MessageBox } from 'element-ui';
-import dreamApi from '@/api/dream'
+// import dreamApi from '@/api/dream'
 
 export default ({
     data() {
@@ -104,7 +104,7 @@ export default ({
         //查询列表
         getList(page = 1) {
             this.currPage = page;
-            dreamApi.getDreamList(this.currPage, this.pageSize, this.searchObj)
+            getDreamList(this.currPage, this.pageSize, this.searchObj)
                 .then(response => {
                     this.tableData = response.data.records;
                     this.totalPage = response.data.total;
@@ -117,7 +117,7 @@ export default ({
 
         //发布
         revertById(id) {
-            dreamApi.updateDreamStatus(id, 2)
+            updateDreamStatus(id, 2)
                 .then(response => {
                     this.$message({
                         type: 'success',
@@ -138,7 +138,7 @@ export default ({
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                dreamApi.updateDreamStatus(id, -1)
+                updateDreamStatus(id, -1)
                     .then(response => {
                         this.$message({
                             type: 'success',

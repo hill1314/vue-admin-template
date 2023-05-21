@@ -60,7 +60,7 @@
         <!-- 文件上传 -->
         <el-dialog title="导入" :visible.sync="dialogImportVisible" width="600px">
             <el-upload :multiple="false" class="upload-demo" :on-success="onUploadSuccess"
-                action="'http://localhost:8020/admin/dic/importData'">
+                action="'http://localhost:8080/admin/dic/importData'">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或 <em>点击上传</em> </div>
                 <div class="el-upload__tip" slot="tip">只能上传xls文件，且不超过500kb</div>
