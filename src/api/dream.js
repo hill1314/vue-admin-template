@@ -69,7 +69,10 @@ export function modifyDetail(dreamId, content) {
     return request({
         url: `/dream/modify/${dreamId}`,
         method: 'post',
-        param: content //data表示用json形式传，非json用param
+        params: {
+            'content':content
+        } 
+        //data表示用json形式传，非json用param
     })
 }
 

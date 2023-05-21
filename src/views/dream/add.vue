@@ -70,18 +70,15 @@ export default ({
         onSubmit() {
             createDream(this.form)
                 .then(response => {
-                    console.log("创建成功", response);
-                    alert(response.data.dream.id);
-
                     this.$message({
                         type: 'success',
                         message: '添加成功!'
                     });
 
-                    this.dreamId = response.data.dream.id;
-                    this.title = response.data.dream.title;
-                    this.content = response.data.dream.content;
-                    this.reward = response.data.dream.reward;
+                    this.dreamId = response.data.id;
+                    this.title = response.data.title;
+                    this.content = response.data.content;
+                    this.reward = response.data.reward;
 
                 }).catch(error => {
                     console.error("error===", error);
