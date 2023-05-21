@@ -55,6 +55,34 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/dream',
+    component: Layout,
+    redirect: '/dream/list',
+    name: '需求管理',
+    meta: { title: '需求管理', icon: 'el-icon-s-help' },
+    children: [
+      {
+        path: 'list',
+        name: '需求列表',
+        component: () => import('@/views/dream/list'),
+        meta: { title: '需求列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: '创建需求',
+        component: () => import('@/views/dream/add'),
+        meta: { title: '创建需求', icon: 'tree' }
+      },
+      {
+        path: 'modify/:id',
+        name: '修改需求',
+        component: () => import('@/views/dream/modify'),
+        meta: { title: '修改需求', icon: 'tree' },
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/hospital',
     component: Layout,
     redirect: '/hospital/list',
